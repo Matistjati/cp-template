@@ -1,11 +1,5 @@
-#undef _GLIBCXX_DEBUG                // disable run-time bound checking, etc
-#pragma GCC optimize("Ofast,inline") // Ofast = O3,fast-math,allow-store-data-races,no-protect-parens
-#pragma GCC optimize ("unroll-loops")
-
-#pragma GCC target("bmi,bmi2,lzcnt,popcnt")                      // bit manipulation
-#pragma GCC target("movbe")                                      // byte swap
-#pragma GCC target("aes,pclmul,rdrnd")                           // encryption
-#pragma GCC target("avx,avx2,f16c,fma,sse3,ssse3,sse4.1,sse4.2") // SIMD
+#pragma GCC optimize("Ofast,inline,unroll-loops")
+#pragma GCC target("avx2,popcnt,lzcnt,abm,bmi,bmi2,fma,tune=native")
 
 #include <bits/stdc++.h>
 #include <bits/extc++.h>
@@ -52,13 +46,11 @@ typedef vector<p4> vp4;
 #define popcount(x) __popcnt(x)
 uint32_t clz(uint32_t x) { return _lzcnt_u32(x); }
 uint32_t ctz(uint32_t x) { return _tzcnt_u32(x); }
-#define bswap64(x) _byteswap_uint64(x)
 #else
 
 #define popcount(x) __builtin_popcountll(x)
 uint32_t clz(uint32_t x) { return __builtin_clz(x); }
 uint32_t ctz(uint32_t x) { return __builtin_ctzll(x); }
-#define bswap64(x) __builtin_bswap64(x)
 
 #if 1
 namespace pbds
@@ -96,13 +88,10 @@ template <typename T> inline void read(T& a) { cin >> a; }
 
 #define quit cout << flush; _Exit(0);
 void readinput() {} // Recursion base case
-template<typename T, typename... Args>
-void readinput(T& arg, Args&... args) {
-    read(arg);
-    processArgs(args...);
-}
+template<typename T, typename... Args> void readinput(T& arg, Args&... args) { read(arg); processArgs(args...);}
 #define dread(type, ...) type __VA_ARGS__; processArgs(__VA_ARGS__);
-template<typename T> istream& operator>>(istream& is, vector<T>& v) { repe(u, v) read(u); return is; }
+template<typename T> istream& operator>>(istream& is, vector<T>& v) { for (T& u : v) read(u); return is; }
+#define _ << " " <<
 
 #ifdef _DEBUG
 #define noop cout << "";
@@ -123,16 +112,14 @@ template<typename T> istream& operator>>(istream& is, vector<T>& v) { repe(u, v)
 #define mp(a,b) (make_pair(a,b))
 
 #define ceildiv(x,y) ((x + y - 1) / y)
+ll binpow(ll a, ll b) { ll res = 1; while (b > 0) { if (b & 1) res = res * a; a = a * a; b >>= 1; } return res; }
+ll binpow(ll a, ll b, ll m) { a %= m; long long res = 1; while (b > 0) { if (b & 1) res = res * a % m; a = a * a % m; b >>= 1; } return res; } // For a < 2^31
 
 template <typename T, typename U> inline void operator+=(pair<T, U>& l, const pair<T, U>& r) { l = { l.first + r.first,l.second + r.second }; }
 template <typename T, typename U> inline pair<T, U> operator+(const pair<T, U> l, const pair<T, U> r) { return { l.first + r.first, l.second + r.second }; }
 template <typename T, typename U> inline pair<T, U> operator-(const pair<T, U> l, const pair<T, U> r) { return { l.first - r.first, l.second - r.second }; }
 template <typename T, typename U> inline pair<T, U> operator*(const pair<T, U> l, const int m) { return { l.first * m, l.second * m }; }
-template <typename Out> inline void split(const string& s, char delim, Out result) { istringstream iss(s); string item; while (getline(iss, item, delim)) { *result++ = item; } }
-inline vector<string> split(const string& s, char delim) { vector<string> elems; split(s, delim, back_inserter(elems)); return elems; }
 vector<string> split(string s, string d) { size_t k = 0, n, e = d.length(); string t; vector<string> r; while ((n = s.find(d, k)) != string::npos) { t = s.substr(k, n - k); k = n + e; r.push_back(t); } r.push_back(s.substr(k)); return r; }
-ll binpow(ll a, ll b) { ll res = 1; while (b > 0) { if (b & 1) res = res * a; a = a * a; b >>= 1; } return res; }
-ll binpow(ll a, ll b, ll m) { a %= m; long long res = 1; while (b > 0) { if (b & 1) res = res * a % m; a = a * a % m; b >>= 1; } return res; } // For a < 2^31
 
 #if 1
 auto Start = chrono::high_resolution_clock::now();
@@ -157,6 +144,7 @@ int32_t main()
 #endif
 
     
+
 
     quit;
 }
