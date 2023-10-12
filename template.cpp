@@ -5,7 +5,7 @@
 #include <bits/extc++.h>
 using namespace std;
 
-#define enablell 1
+#define enablell 0
 
 typedef long long ll;
 typedef unsigned long long ull;
@@ -44,13 +44,9 @@ typedef vector<p4> vp4;
 
 #define assert(x) debassert(x)
 #define popcount(x) __popcnt(x)
-uint32_t clz(uint32_t x) { return _lzcnt_u32(x); }
-uint32_t ctz(uint32_t x) { return _tzcnt_u32(x); }
 #else
-
 #define popcount(x) __builtin_popcountll(x)
-uint32_t clz(uint32_t x) { return __builtin_clz(x); }
-uint32_t ctz(uint32_t x) { return __builtin_ctzll(x); }
+
 
 #if 1
 namespace pbds
@@ -84,12 +80,13 @@ inline void read(string& s) { char c; while ((c = gc()) != EOF && c != '\n' && c
 inline void readline(string& s) { char c; while ((c = gc()) != EOF && c != '\n') { s.push_back(c); } }
 #else
 template <typename T> inline void read(T& a) { cin >> a; }
+inline void read(p2& a) { cin >> a.first >> a.second; }
 #endif
 
 #define quit cout << flush; _Exit(0);
 void readinput() {} // Recursion base case
-template<typename T, typename... Args> void readinput(T& arg, Args&... args) { read(arg); processArgs(args...);}
-#define dread(type, ...) type __VA_ARGS__; processArgs(__VA_ARGS__);
+template<typename T, typename... Args> void readinput(T& arg, Args&... args) { read(arg); readinput(args...);}
+#define dread(type, ...) type __VA_ARGS__; readinput(__VA_ARGS__);
 template<typename T> istream& operator>>(istream& is, vector<T>& v) { for (T& u : v) read(u); return is; }
 #define _ << " " <<
 
@@ -142,8 +139,6 @@ int32_t main()
     ifstream instream("C:\\users\\matis\\source\\repos\\comp_prog\\x64\\debug\\in.txt");
     cin.rdbuf(instream.rdbuf());
 #endif
-
-    
 
 
     quit;
